@@ -1,6 +1,7 @@
 package com.example.appchat
 
 import UI.Home
+import UI.PersionalChat
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
             AppChatTheme {
                 Surface(modifier = Modifier.fillMaxSize())
                 {
-                    Home()
+                    PersionalChat()
                 }
             }
         }

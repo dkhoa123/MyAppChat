@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,7 +27,7 @@ fun Taskbar(modifier: Modifier = Modifier){
     Box(modifier = modifier
     ){
         Row(Modifier
-            .width(360.dp).height(85.dp)
+            .fillMaxWidth().height(85.dp)
             .background(Color(0x99111111)),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
