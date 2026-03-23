@@ -1,6 +1,7 @@
 package UI
 
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,7 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
@@ -52,30 +52,35 @@ enum class DragState { // vị trí của container
     Center,
     Right
 }
+
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SwipeChatItem() {
 
-    val density = LocalDensity.current //lấy tỉ trọng màn hình chuyển dp -> px
+    val density = LocalDensity.current
 
-    val state = remember { //tạo trạng thái kéo
+    val decaySpec = remember(density) { splineBasedDecay<Float>(density) }
+
+    val state = remember {
         AnchoredDraggableState(
             initialValue = DragState.Center,
-            positionalThreshold = { it * 0.5f }, // việc kéo container nhẹ sẽ trở lại như cũ chứ chưa hiện icon
-            velocityThreshold = { with(density) { 100.dp.toPx() } }, // tốc độ kéo nếu nhanh tốc độ đã set 100.dp.toPx thì đổi state liền
-            animationSpec = tween(), // animation
-            confirmValueChange = { true } //luôn cho đổi state
+            positionalThreshold = { it * 0.5f },
+            velocityThreshold = { with(density) { 100.dp.toPx() } },
+            snapAnimationSpec = tween(),
+            decayAnimationSpec = decaySpec,
+            confirmValueChange = { true }
         )
     }
 
-    val maxSwipe = with(density) { 180.dp.toPx() } // set giới hạn tối đa kéo của container
+    val maxSwipe = with(density) { 180.dp.toPx() }
 
-    LaunchedEffect(Unit) { // định nghĩa các Anchor
+    LaunchedEffect(maxSwipe) {
         state.updateAnchors(
             DraggableAnchors {
-                DragState.Left at -maxSwipe //-180dp
-                DragState.Center at 0f      //0dp
-                DragState.Right at maxSwipe // 180dp
+                DragState.Left at -maxSwipe
+                DragState.Center at 0f
+                DragState.Right at maxSwipe
             }
         )
     }

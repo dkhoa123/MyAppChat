@@ -33,11 +33,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.appchat.R
 import com.example.appchat.ui.theme.AppChatTheme
 
 @Composable
-fun PersionalChat(){
+fun PersionalChat(navController: NavController){
     Box(){
         Column(
             modifier = Modifier
@@ -95,6 +97,7 @@ fun PersionalChat(){
 @Composable
 fun PreviewPerChat(){
     AppChatTheme {
-        PersionalChat()
+        val navController = rememberNavController()
+        PersionalChat(navController = navController)
     }
 }

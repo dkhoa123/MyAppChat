@@ -3,6 +3,7 @@ package UI
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -20,14 +21,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.appchat.ui.theme.AppChatTheme
 
 @Composable
-fun Home(){
+fun Home(navController: NavController){
     var text by remember { mutableStateOf("Search for a chat...") }
     Box(
         modifier = Modifier
-            .width(360.dp).height(800.dp)
+            .fillMaxSize()
             .background(Color(0xFF121212)),
     ){
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -54,7 +57,6 @@ fun Home(){
                 }
             }
         }
-        Taskbar(modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 
@@ -62,6 +64,7 @@ fun Home(){
 @Composable
 fun Preview3(){
     AppChatTheme {
-        Home()
+        val navController = rememberNavController()
+        Home(navController)
     }
 }

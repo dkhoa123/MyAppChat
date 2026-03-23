@@ -2,6 +2,7 @@ package UI
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,66 +33,68 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.appchat.R
 import com.example.appchat.ui.theme.AppChatTheme
 
+
 @Composable
-fun AddFriend(){
+fun AddFriend(navController: NavController){
+    var tuychon by remember { mutableStateOf(0) }
     Box(){
         Column(modifier = Modifier
             .fillMaxWidth()
             .background(Color(0xFF121212))
-        ){
-            Text("Mọi người",
+        ) {
+            Text(
+                "Mọi người",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
-                modifier = Modifier.padding(start = 10.dp,top = 22.dp)
+                modifier = Modifier.padding(start = 10.dp, top = 22.dp)
             )
             listAvatar()
-            AllWelcome()
-//            LazyColumn {
-//                items(100){item ->
-//                    listFriend()}
-//            }
-            LazyColumn {
-                items(10) { item ->
-                    listAddFriend()
+            AllWelcome(
+                tuychon,
+                onTabSelected = {tuychon = it}
+            )
+              LazyColumn {
+                    items(100) { item ->
+                        when(tuychon) {
+                            0 -> listFriend()
+                            1 -> listAddFriend()
+                        }
+                    }
+                }
+        }
+    }
+}
+@Composable
+fun AllWelcome(tuychon: Int,
+               onTabSelected: (Int) -> Unit){
+    val tabs = listOf("Tất cả","Lời mời kết bạn")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            tabs.forEachIndexed { index, title ->
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(15.dp))
+                        .background(if (tuychon == index) Color(0x99373737) else Color.Transparent)
+                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                        .clickable{onTabSelected(index)}
+                ) {
+                    Text(
+                        title,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
                 }
             }
         }
-        Taskbar(modifier = Modifier.align(Alignment.BottomCenter))
-    }
-}
-
-@Composable
-fun AllWelcome(){
-    Row(modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center){
-        Box(modifier = Modifier
-            .clip(RoundedCornerShape(15.dp))
-            .background(Color(0x99373737))
-            .padding(horizontal = 10.dp, vertical = 4.dp)
-        ){
-            Text("Tất cả",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-        Spacer(modifier = Modifier.width(40.dp))
-        Box(modifier = Modifier
-            .clip(RoundedCornerShape(15.dp))
-            .background(Color(0x99373737))
-            .padding(horizontal = 10.dp, vertical = 4.dp)
-        ){
-            Text("Lời mời kết bạn",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-        }
-    }
 }
 
 @Composable
@@ -178,6 +186,7 @@ fun listAddFriend(){
 @Composable
 fun PreviewAddFriend(){
     AppChatTheme {
-        AddFriend()
+        val navController = rememberNavController()
+        AddFriend(navController = navController)
     }
 }

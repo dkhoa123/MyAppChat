@@ -1,6 +1,7 @@
 package UI
 
 import DataClass.SettingItems
+import HeaderFlooter.Taskbar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,19 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -35,11 +32,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.appchat.R
 import com.example.appchat.ui.theme.AppChatTheme
 
 @Composable
-fun Settings(items: List<SettingItems>){
+fun Settings(navController: NavController,items: List<SettingItems>){
     Box(Modifier
         .fillMaxSize()
         .background(Color(0xFF121212))
@@ -53,24 +52,11 @@ fun Settings(items: List<SettingItems>){
                Spacer(Modifier.height(10.dp))
            }
        }
-
-       Taskbar(modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 
 @Composable
 fun HeadSetting(){
-        Row(Modifier.fillMaxWidth()){
-            Icon(Icons.Default.ArrowBack,null,
-                tint = Color.White
-            )
-            Spacer(Modifier.width(10.dp))
-            Text("Setting",
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                color = Color.White
-            )
-        }
         Spacer(Modifier.height(10.dp))
         Row(Modifier
             .fillMaxWidth()
@@ -158,6 +144,7 @@ fun OptionSetting(items: SettingItems){
 @Composable
 fun PreviewSetting(){
     AppChatTheme {
-        Settings(items = settings)
+        val navController = rememberNavController()
+        Settings(navController = navController,items = settings)
     }
 }
