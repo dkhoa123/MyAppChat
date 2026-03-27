@@ -1,4 +1,4 @@
-package UI
+package com.example.appchat.View
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,17 +16,14 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,14 +38,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.appchat.presentation.auth.AuthViewModel
 import com.example.appchat.ui.theme.AppChatTheme
 
 @Composable
-fun Verification(){
+fun Verification(vm: AuthViewModel, onVerified: () -> Unit)
+{
+    val state by vm.state.collectAsState()
+
+    LaunchedEffect(state.isLoggedIn) {
+        if (state.isLoggedIn) onVerified()
+    }
     Column(
         Modifier
-        .width(360.dp)
-        .height(800.dp)
+        .fillMaxSize()
         .background(Color(0xFF121212)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -60,19 +63,21 @@ fun Verification(){
             fontSize = 20.sp
         )
         Text(
-            text = "We have sent a verification code to +62 812 3456 7890",
+            text =
+                "We have sent a verification code to ${state.phoneE164.ifBlank { "+84..." }}",
             color = Color.LightGray,
             fontSize = 14.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.width(250.dp).height(44.dp)
         )
 
-        OTPTextField { otp ->
-            println("OTP: $otp")
+        OTPTextField(otpLength = 6) { otp ->
+            vm.onOtpChanged(otp)
         }
 
         Button(
-            onClick = {},
+            onClick = vm::verifyOtp,
+            enabled = !state.isLoading && state.verificationId != null,
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
             modifier = Modifier
                 .padding(top = 30.dp)
@@ -88,7 +93,7 @@ fun Verification(){
                 )
         )
         {
-            Text(text = "Continue")
+            Text(text = if (state.isLoading) "Verifying..." else "Continue")
         }
         Row(
             verticalAlignment = Alignment.CenterVertically) {
@@ -97,7 +102,7 @@ fun Verification(){
                 color = Color.White,
                 fontSize = 12.sp
             )
-            TextButton(onClick = {},
+            TextButton(onClick = onVerified,
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Text("Resend code",
@@ -112,12 +117,12 @@ fun Verification(){
 
 @Composable
 fun OTPTextField(
-    otpLength: Int = 4,
+    otpLength: Int = 6,
     onOtpComplete: (String) -> Unit
 ) {
 
     val focusRequesters = List(otpLength) { FocusRequester() }
-    val otpValues = remember { mutableStateListOf("", "", "", "") }
+    val otpValues = remember { mutableStateListOf("", "", "", "", "", "") }
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
@@ -173,6 +178,6 @@ fun OTPTextField(
 @Composable
 fun Preview1(){
     AppChatTheme {
-        Verification()
+//        Verification()
     }
 }

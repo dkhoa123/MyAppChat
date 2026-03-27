@@ -1,4 +1,4 @@
-package UI
+package com.example.appchat.View
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

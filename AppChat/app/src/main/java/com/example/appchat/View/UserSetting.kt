@@ -1,10 +1,11 @@
-package UI
+package com.example.appchat.View
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -40,8 +41,7 @@ import com.example.appchat.ui.theme.AppChatTheme
 fun UserSetting(){
     var username by remember { mutableStateOf("Username") }
     Column(Modifier
-        .width(360.dp)
-        .height(800.dp)
+        .fillMaxSize()
         .background(Color(0xFF121212)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center

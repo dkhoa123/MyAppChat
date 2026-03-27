@@ -1,4 +1,4 @@
-package DataClass
+package com.example.appchat.DataClass
 
 import android.media.Image
 import androidx.compose.ui.graphics.Color

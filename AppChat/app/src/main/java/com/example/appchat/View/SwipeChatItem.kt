@@ -1,4 +1,4 @@
-package UI
+package com.example.appchat.View
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.splineBasedDecay
